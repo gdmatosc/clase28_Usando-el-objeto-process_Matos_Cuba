@@ -1,10 +1,34 @@
 const mongoose=require('mongoose');
-const carritoCollection='carritoProductos'
 
-let connCarritoLDB=mongoose.createConnection('mongodb://localhost:27017/dbCoderTest',{
-    useUnifiedTopology:true,
-    useNewUrlParser:true
-})
+const MONGO_OPTIONS={
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  socketTimeoutMS: 30000,
+  keepAlive: true,
+  maxPoolSize: 50,
+  autoIndex: false,
+  retryWrites: false
+}
+
+//const MONGO_USERNAME=process.env.MONGO_USERNAME || 'gmatosc';
+//const MONGO_PASSWORD=process.env.MONGO_PASSWORD || 'nosqlls31287';
+//const MONGO_HOST=process.env.MONGO_URL || 'cdb-nosql-test1.p8ubd58.mongodb.net/test1MongoCDB?retryWrites=true&w=majority';
+
+const MONGO_USERNAME=process.env.MONGO_USERNAME;
+const MONGO_PASSWORD=process.env.MONGO_PASSWORD;
+const MONGO_HOST=process.env.MONGO_URL;
+
+const MONGO={
+  host: MONGO_HOST,
+  username: MONGO_USERNAME,
+  password: MONGO_PASSWORD,
+  options: MONGO_OPTIONS,
+  url: `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}`
+}
+
+let connCarritoCDB=mongoose.createConnection(MONGO.url,MONGO_OPTIONS)
+
+const carritoCollection='carritoProductos'
 
 const productosSchema=new mongoose.Schema({
     nombre:{type:String, require:true,max:100},
@@ -19,8 +43,8 @@ const carritoSchema = new mongoose.Schema({
     products: [productosSchema]
   });
 
-const carritoLDBModel=connCarritoLDB.model(carritoCollection,carritoSchema)
-module.exports=carritoLDBModel;
+const carritoCDBModel=connCarritoCDB.model(carritoCollection,carritoSchema)
+module.exports=carritoCDBModel;
 
 /* //bloc
 const mongoose=require('mongoose');

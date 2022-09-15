@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../img/favicon_computer_now_32x32.png">
-    <link rel="stylesheet" href="./css/estiloProducto.css">
+    <link rel="stylesheet" href="./css/estiloOperaciones1.css">
     <title>Productos</title>
 </head>
 <body>
@@ -43,19 +43,29 @@
          </div>
          <!--4.Sección2: Objetivos-->
          <div class="Section2">	
-            
-            
-            
+            <fieldset class="legendas formCentral">
+                <legend><span class="numParrafo">1.Formulario</span></legend>
+                <div>
+                    <form id="formSendDatos">
+                        <br><br>
+                        <label>Cantidad:</label>
+                        <input name="nombre" type="number">
+                        <br><br>
+                        <button class="btnEnviar" type="submit">Enviar</button>
+                    </form>
+                    <br>
+                </div>
+            </fieldset>
          </div>
          <!--5.Sección3: DataFlow FrontEnd-->
          <div class="Section3">	
-            <form class="formulario" action="/login" method="post">
-                <br><br>
-                <h2 class="login">En construcción</h2>
-                
-                
-                <br><br>
-            </form>
+            <fieldset class="legendas formCentralResultado">
+                <legend><span class="numParrafo">2.Resultados</span></legend>
+                <div id="resultadoFuncion1" class="formResultados">
+                 
+                    
+                </div>
+            </fieldset>
          </div>
          <!--6.Sección4: DataFlow BackEnd-->
          <div class="Section4">	
@@ -95,5 +105,6 @@
          </div>
  
      </div>
+     <script src="/js/operaciones1Admin.js"></script>
 </body>
 </html>

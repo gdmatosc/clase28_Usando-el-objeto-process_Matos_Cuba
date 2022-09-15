@@ -10,9 +10,13 @@ const MONGO_OPTIONS={
     retryWrites: false
 }
 
-const MONGO_USERNAME=process.env.MONGO_USERNAME || 'gmatosc';
-const MONGO_PASSWORD=process.env.MONGO_PASSWORD || 'nosqlls31287';
-const MONGO_HOST=process.env.MONGO_URL || 'cdb-nosql-test1.p8ubd58.mongodb.net/test1MongoCDB?retryWrites=true&w=majority';
+//const MONGO_USERNAME=process.env.MONGO_USERNAME || 'gmatosc';
+//const MONGO_PASSWORD=process.env.MONGO_PASSWORD || 'nosqlls31287';
+//const MONGO_HOST=process.env.MONGO_URL || 'cdb-nosql-test1.p8ubd58.mongodb.net/test1MongoCDB?retryWrites=true&w=majority';
+
+const MONGO_USERNAME=process.env.MONGO_USERNAME;
+const MONGO_PASSWORD=process.env.MONGO_PASSWORD;
+const MONGO_HOST=process.env.MONGO_URL;
 
 const MONGO={
     host: MONGO_HOST,

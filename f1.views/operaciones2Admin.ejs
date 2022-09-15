@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../img/favicon_computer_now_32x32.png">
-    <link rel="stylesheet" href="./css/estiloProducto.css">
+    <link rel="stylesheet" href="./css/estiloOperaciones2.css">
     <title>Productos</title>
 </head>
 <body>
@@ -43,19 +43,41 @@
          </div>
          <!--4.Sección2: Objetivos-->
          <div class="Section2">	
-            
-            
-            
+            <fieldset class="legendas formCentral">
+                <legend><span class="numParrafo">1.Formulario</span></legend>
+                <div>
+                    <form>
+                        <br><br>
+                        <label>Id del proceso:</label>
+                        <span class="label other"><%=id_proceso%></span>
+                        <br><br>
+                        <label>Nombre de la plataforma:</label>
+                        <span class="label other"><%=nombre_plataforma%></span>
+                        <br><br>
+                        <label>Versión de node:</label>
+                        <span class="label other"><%=version_node%></span>
+                        <br><br>
+                        <label>Carpeta del proyecto:</label>
+                        <br><br>
+                        <span class="label other"><%=carpeta_proyecto%></span>
+                        <br><br>
+                        <label>Path de ejecución:</label>
+                        <span class="label other"><%=path_ejecucion%></span>
+                        <br><br>
+                        <label>Memoria reservada:</label>
+                        <span class="label other"><%=memoria_reservada%></span>
+                        <br><br>
+                        <label>Argumentos de entrada:</label>
+                        <span class="label other"><%=argumentos_entrada%></span>
+                        <br><br>
+                    </form>
+                    <br>
+                </div>
+            </fieldset>
          </div>
          <!--5.Sección3: DataFlow FrontEnd-->
          <div class="Section3">	
-            <form class="formulario" action="/login" method="post">
-                <br><br>
-                <h2 class="login">En construcción</h2>
-                
-                
-                <br><br>
-            </form>
+           
          </div>
          <!--6.Sección4: DataFlow BackEnd-->
          <div class="Section4">	

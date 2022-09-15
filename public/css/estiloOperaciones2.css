@@ -153,9 +153,9 @@ span.numParrafo{
       "Logo Logo Logo Logo"
       "Header_nav Header_nav Header_nav Header_nav"
       "Section1 Section1 Section1 Section1"
-      "Section2 Section2 Section3 Section3"
-      "Section4 Section4 Section4 Section4"
-      "Section5 Section5 Section5 Section5"
+      "Section2 Section2 Section2 Section2"
+      "Section3 Section3 Section3 Section3"
+      "Section4 Section4 Section5 Section5"
       "Footer Footer Footer Footer";
   }
   
@@ -258,6 +258,24 @@ span.numParrafo{
     margin:0.5em;
 }
 
+.formCentral{
+    align-items: right;
+    padding-left:25%;
+    padding-right:15%;
+
+    margin-left: 15%;
+    margin-right: 20%;
+}
+
+.formCentralResultado{
+    align-items: center;
+    padding-left:25%;
+    padding-right:15%;
+
+    margin-left: 15%;
+    margin-right: 20%;
+}
+
 .Section5 iframe {
     display: block;
     text-align: center;
@@ -284,6 +302,17 @@ span.numParrafo{
     column-gap: 2em;
     /*justify-content: space-between;*/
 }
+
+.label {
+    color: white;
+    padding: 8px;
+  }
+  
+.success {background-color: #04AA6D;} /* Green */
+.info {background-color: #2196F3;} /* Blue */
+.warning {background-color: #ff9800;} /* Orange */
+.danger {background-color: #f44336;} /* Red */
+.other {background-color: #e7e7e7; color: black;} /* Gray */
 /* #endregion */ 
 
 /* #region. 7.Flexbox de imágenes*/

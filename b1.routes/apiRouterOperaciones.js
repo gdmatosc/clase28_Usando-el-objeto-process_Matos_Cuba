@@ -1,43 +1,19 @@
 const express=require('express')
 const { Router }=express
-const ContenedorFile=require('../b4.contenedores/contenedorFile')
-const contenedorFileChatBasic=new ContenedorFile('chatMensajes.json')
-const apiRouterMant=Router(); 
-/*
-apiRouterMant.get('/comentarios/file', async (req, res) => {
-    await contenedorFileChat.init();
-    let contenedorVar=await contenedorFileChat.getAll();
-    console.log("contenedorVar.comentariosFile.RouterGet",contenedorVar)
-    res.json(contenedorVar)
-    console.log("Enviado.comentariosFile.RouterGet")
+const {fork}=require('child_process')
+
+const apiRouterOper=Router(); 
+
+apiRouterOper.get('/numerosRandom/:id', (req, res) => {
+    let childNumRes=fork('../Clase28.desafio/b6.funciones_adicionales/operacion1.js')
+    let cant = req.query.cant
+    console.log("cant.apiRouterGet",cant)
+    childNumRes.send({cant})
+    childNumRes.on('message',resultado=>{
+        console.log("resultado.apiRouterOper.Get",resultado)
+        //let resultado1={ 'número random generado': '401', 'contador de cada número': 1 }
+        return res.json(resultado)
+    })
 });
 
-apiRouterMant.post('/comentarios/file',async (req,res)=>{
-    console.log("apiRouterMant.post")
-    const dataBody=req.body;
-    console.log("username-text.comentariosFile.routerPost",dataBody)
-    await contenedorFileChat.save(dataBody);
-    console.log("Guardado.comentariosFile.routerPost")
-})
-
-*/
-
-apiRouterMant.get('/comentarios/file', async (req, res) => {
-    //await contenedorFileChatBasic.init();
-    let contenedorVar=await contenedorFileChatBasic.getAll();
-    //let contenedorVar=await DAO.chatAdv.getAll();
-    console.log("contenedorVar.comentariosFile.RouterGet",contenedorVar)
-    res.json(contenedorVar)
-    console.log("Enviado.comentariosFile.RouterGet")
-});
-
-
-apiRouterMant.post('/comentarios/file',async (req,res)=>{
-    const mensajeRecibido=req.body;
-    //const {nombre,edad,correo,textoIngresado}=req.body;
-    console.log("username-text.comentariosFile.routerPost",mensajeRecibido)
-    await contenedorFileChatBasic.save(mensajeRecibido);
-    console.log("Guardado.comentariosFile.routerPost")
-})
-
-module.exports=apiRouterMant
+module.exports=apiRouterOper

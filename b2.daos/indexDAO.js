@@ -1,15 +1,18 @@
 const chatFileDAO=require('./chat/chatFileDAO')
 const chatMongoLDBDAO=require('./chat/chatMongoLDBDAO')
 const chatMongoCDBDAO=require('./chat/chatMongoCDBDAO')
-const productosGeneralFileDAO=require('./productos/productosGeneralFileDAO')
-const productosGeneralMongoLDBDAO=require('./productos/productosGeneralLDBDAO')
-const carritoProductosFileDAO=require('./productos/carritoProductosFileDAO')
-const carritoProductosMongoLDBDAO=require('./productos/carritoProductosLDBDAO')
+const productosGeneralFileDAO=require('./productos/productosFileDAO')
+const productosGeneralMongoLDBDAO=require('./productos/productosLDBDAO')
+const productosGeneralMongoCDBDAO=require('./productos/productosCDBDAO')
+const carritoProductosFileDAO=require('./productos/carritoProdFileDAO')
+const carritoProductosMongoLDBDAO=require('./productos/carritoProdLDBDAO')
+const carritoProductosMongoCDBDAO=require('./productos/carritoProdCDBDAO')
 ///const productosMantenimientoFileDAO=require('./products/productsAdvFileDAO')
 //const chatBasicMongoLdbDAO=require('./chat/chatBasicMongoLdbDAO')
 
 //const typeDB=process.env.typeDB
-let typeDB='mongoLDB'
+let typeDB='mongoCDB'
+//let typeDB='mongoLDB'
 //let typeDB='file'
 const FactoryDAO=()=>{
     //const typeDB=process.env.typeDB || 'file'
@@ -34,9 +37,9 @@ const FactoryDAO=()=>{
         console.log('Generate DAO with mongo Cdb');
         return{
             //chatBasic:new chatBasicMongoCdbDAO(),
-            chatGeneral:new chatMongoCDBDAO()
-            //productsBasic: new productsBasicMongoCdbDAO(),
-            //productsAdv: new productsAdvMongoCdbDAO()
+            chatGeneral:new chatMongoCDBDAO(),
+            productosGeneral: new productosGeneralMongoCDBDAO(),
+            carritoProductos: new carritoProductosMongoCDBDAO()
         }
     }
     throw new Error('typeDB is not found')

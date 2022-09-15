@@ -7,12 +7,15 @@
 const express=require('express');
 const session=require('express-session')
 const app=express();
+require('dotenv').config({ path: './b7.configuraciones/config.env' })
+const hostname = process.env.HOSTNAME;
+//const port = process.env.PORT;
 
 const MongoStore=require('connect-mongo')
 const mongoose=require('mongoose')
 
 const apiRouterClientes=require('./b1.routes/apiRouterClientes');
-const apiRouterMant=require('./b1.routes/apiRouterOperaciones');
+const apiRouterOper=require('./b1.routes/apiRouterOperaciones');
 const apiRouterAuth=require('./b1.routes/apiRouterAuth')
 const { Server }=require("socket.io");
 
@@ -28,7 +31,23 @@ const path = require('path')
 
 const UsersModel=require('./b3.models/user.model')
 
-const PORT=8081;
+//const PORT=parseInt(process.argv[2]) || 8080;
+
+const yargs=require('yargs')(process.argv.slice(2))
+const argv=yargs
+    .default({
+        PORT: 8080,
+        ruta: 'local'
+    })
+    .alias({
+        p: 'PORT'
+    })
+    .boolean('admin')
+    .argv
+console.log(argv)
+console.log(argv.ruta)
+console.log(argv.PORT)
+
 /* #endregion */
 
 /* #region. 2.Recursos de web socket*/
@@ -43,7 +62,7 @@ let messages=[]
 let GetComentarios=()=>{
     const options = {
         host : 'localhost',
-        port : 8081,
+        port : argv.PORT,
         path: '/apiClientes/comentarios',
         method: 'GET'
     };
@@ -95,68 +114,19 @@ io.on('connection',(socket)=>{
 })
 /* #endregion */ 
 
-/* #region. 3.Uso de objetos de librería express*/
+/* #region. 3.Configuraciones de lib express, uso de EJS y APIs*/
 
-//3.1.Uso de objetos en otros JS
+//3.1.config. general de Lib express
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 app.use(express.static(__dirname+'/public'))
-/*
-app.use(session({
-    store:new MongoStore({
-        mongoUrl: 'mongodb://localhost:27017/sessions'
-    }),
-    secret:'conrat',
-    resave:false,
-    saveUninitialized:false
-}))
-*/
+//3.2.config. APIs
 app.use('/apiClientes',apiRouterClientes);
-app.use('/apiMantenimiento',apiRouterMant);
+app.use('/apiOperaciones',apiRouterOper);
+//3.3.config. EJS
 app.set('views','./f1.views')
 app.set('view engine','ejs')
 
-//3.3.Envío de datos a URLs
-/*
-app.get('/login',(req,res)=>{
-    if(req.session.username) return res.redirect('/home')
-    res.sendFile('login.html',{root: __dirname+'/public'})
-})
-
-app.post('/login',(req,res)=>{
-    req.session.username=req.body.username
-    return res.redirect('/home')
-})
-
-app.get('/home',(req,res)=>{
-    console.log(req.session);
-    let username=req.session.username
-    console.log("reqSessionUsername.appGet",username)
-    if(!username) return res.redirect('/login')
-    return res.render('home',{username})
-})
-
-app.get('/logout',(req,res)=>{
-    let username=req.session.username
-    req.session.destroy()
-    return res.render('logout',{username})
-
-})
-
-app.get('/chat',(req,res)=>{
-    console.log(req.session);
-    let username=req.session.username
-    console.log("reqSessionUsername.appGet",username)
-    return res.render('chat.ejs',{username})
-})
-
-app.get('/productos',(req,res)=>{
-    console.log(req.session);
-    let username=req.session.username
-    console.log("reqSessionUsername.appGet",username)
-    return res.render('productos.ejs',{username})
-})
-*/
 /* #endregion */ 
 
 /* #region. 4.Passport con enrutamiento*/
@@ -219,29 +189,12 @@ app.use(session({
 
 app.use(passport.initialize())
 app.use(passport.session())
-//mongoose.connect
-/*
-function connectDB(url,cb){
-    mongoose.connect(
-        url,
-        {
-            useNewUrlParser:true,
-            useUnifiedTopology:true
 
-        },
-        err=>{
-            if(!err) console.log('Connected DB para passport')
-            if(cb!=null) cb(err)
-        }
-    )
-}
+/* #endregion */ 
 
-connectDB('mongodb://localhost:27017/dbCoderTest',err=>{
-    if(err) return console.log('Error connecting DB',err)   
-})
-*/
+/* #region. 5.Enrutamiento de autenticación y autorización*/
 
-//4.2.Rutas de autenticación
+//5.1.Rutas de autenticación
 app.get('/',apiRouterAuth.getRoot)
 app.get('/login',apiRouterAuth.getLogin)
 
@@ -278,7 +231,7 @@ app.get('/private',checkAuthentication,(req,res)=>{
     res.send('<h1>Solo pudiste entrar porque está logueado</h1>')
 })
 
-//4.3.Rutas de autorización
+//5.2.Rutas de autorización
 app.get('/homeGeneral',checkAuthentication,(req,res)=>{
     console.log(req.session);
     let username=req.user.username
@@ -323,16 +276,42 @@ app.get('/productosMantenimiento',checkAuthentication,(req,res)=>{
     return res.render('productosMantenimiento.ejs',{username})
 })
 
+app.get('/operaciones1Admin',checkAuthentication,(req,res)=>{
+    console.log(req.session);
+    let username=req.session.username
+    console.log("reqSessionUsername.appGet",username)
+    return res.render('operaciones1Admin.ejs',{username})
+})
 
+app.get('/operaciones2Admin',checkAuthentication,(req,res)=>{
+    console.log(req.session);
+    let username=req.session.username
+    let dato1='hola'
+    let id_proceso=process.pid
+    nombre_plataforma=process.platform
+    version_node=process.version
+    carpeta_proyecto=process.cwd()
+    path_ejecucion=process.execPath
+    memoria_reservada=process.memoryUsage.rss()
+    argumentos_entrada=process.execArgv
+    console.log("reqSessionUsername.appGet",username)
+    return res.render('operaciones2Admin.ejs',{username,id_proceso,nombre_plataforma,version_node,carpeta_proyecto,path_ejecucion,memoria_reservada,argumentos_entrada})
+})
+
+/* #endregion */ 
+
+/* #region. 6.Funciones adicionales*/
 
 
 /* #endregion */ 
 
-/* #region. 5.Iniciando servidor general*/
-server.listen(PORT,()=>{
-    console.log('Listening on port: '+PORT);
+/* #region. 7.Iniciando servidor general*/
+server.listen(argv.PORT,()=>{
+    console.log(`Listening en http://${hostname}:${argv.PORT}`);
 })
 /* #endregion */ 
+
+/* #region. Bloc*/
 
 /*
 app.post('/login',passport.authenticate('login'),(req,res)=>{
@@ -340,4 +319,85 @@ app.post('/login',passport.authenticate('login'),(req,res)=>{
     let username=req.session.username
     res.render('home',{username})
 })
+
 */
+
+/*
+app.use(session({
+    store:new MongoStore({
+        mongoUrl: 'mongodb://localhost:27017/sessions'
+    }),
+    secret:'conrat',
+    resave:false,
+    saveUninitialized:false
+}))
+*/
+
+//3.3.Envío de datos a URLs
+/*
+app.get('/login',(req,res)=>{
+    if(req.session.username) return res.redirect('/home')
+    res.sendFile('login.html',{root: __dirname+'/public'})
+})
+
+app.post('/login',(req,res)=>{
+    req.session.username=req.body.username
+    return res.redirect('/home')
+})
+
+app.get('/home',(req,res)=>{
+    console.log(req.session);
+    let username=req.session.username
+    console.log("reqSessionUsername.appGet",username)
+    if(!username) return res.redirect('/login')
+    return res.render('home',{username})
+})
+
+app.get('/logout',(req,res)=>{
+    let username=req.session.username
+    req.session.destroy()
+    return res.render('logout',{username})
+
+})
+
+app.get('/chat',(req,res)=>{
+    console.log(req.session);
+    let username=req.session.username
+    console.log("reqSessionUsername.appGet",username)
+    return res.render('chat.ejs',{username})
+})
+
+app.get('/productos',(req,res)=>{
+    console.log(req.session);
+    let username=req.session.username
+    console.log("reqSessionUsername.appGet",username)
+    return res.render('productos.ejs',{username})
+})
+*/
+
+//mongoose.connect
+/*
+function connectDB(url,cb){
+    mongoose.connect(
+        url,
+        {
+            useNewUrlParser:true,
+            useUnifiedTopology:true
+
+        },
+        err=>{
+            if(!err) console.log('Connected DB para passport')
+            if(cb!=null) cb(err)
+        }
+    )
+}
+
+connectDB('mongodb://localhost:27017/dbCoderTest',err=>{
+    if(err) return console.log('Error connecting DB',err)   
+})
+*/
+
+/* #endregion */ 
+
+
+
